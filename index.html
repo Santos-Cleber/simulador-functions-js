@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevCorp - Sistema de Treinamento</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2d3561 0%, #1a1f3a 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .company-name {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .tagline {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .supervisor-section {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .tutorial-section {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin-bottom: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .tutorial-section::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .tutorial-section::-webkit-scrollbar-track {
+            background: #bbdefb;
+            border-radius: 4px;
+        }
+
+        .tutorial-section::-webkit-scrollbar-thumb {
+            background: #2196f3;
+            border-radius: 4px;
+        }
+
+        .tutorial-section::-webkit-scrollbar-thumb:hover {
+            background: #1976d2;
+        }
+
+        .tutorial-title {
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .tutorial-content {
+            color: #0d47a1;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .tutorial-content ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .tutorial-content li {
+            margin-bottom: 8px;
+        }
+
+        .example-box {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            position: relative;
+        }
+
+        .example-label {
+            color: #4caf50;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .btn-show-example {
+            background: #2196f3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-show-example:hover {
+            background: #1976d2;
+            transform: translateY(-2px);
+        }
+
+        .btn-close-tutorial {
+            background: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-left: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-close-tutorial:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+
+        .btn-copy-example {
+            background: #ff9800;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-copy-example:hover {
+            background: #f57c00;
+        }
+
+        .supervisor-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .supervisor-message {
+            flex: 1;
+        }
+
+        .supervisor-name {
+            font-weight: bold;
+            color: #2d3561;
+            margin-bottom: 5px;
+        }
+
+        .supervisor-role {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .message-text {
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            height: calc(100vh - 280px);
+            min-height: 600px;
+        }
+
+        .exercises-panel {
+            background: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 2px solid #e0e0e0;
+        }
+
+        .exercises-panel::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .exercises-panel::-webkit-scrollbar-track {
+            background: #e0e0e0;
+            border-radius: 5px;
+        }
+
+        .exercises-panel::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 5px;
+        }
+
+        .exercises-panel::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+
+        .exercises-title {
+            font-size: 1.2em;
+            color: #2d3561;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .exercise-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exercise-item:hover {
+            transform: translateX(5px);
+            border-color: #667eea;
+        }
+
+        .exercise-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #764ba2;
+        }
+
+        .exercise-info {
+            flex: 1;
+        }
+
+        .exercise-number {
+            font-weight: bold;
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
+
+        .exercise-title {
+            margin-top: 3px;
+        }
+
+        .check-mark {
+            font-size: 24px;
+            color: #4caf50;
+            display: none;
+        }
+
+        .exercise-item.completed .check-mark {
+            display: block;
+        }
+
+        .workspace {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .exercise-description {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .description-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .description-text {
+            color: #856404;
+            line-height: 1.6;
+        }
+
+        .code-output-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .editor-section, .output-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-title {
+            font-weight: bold;
+            color: #2d3561;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .code-editor {
+            flex: 1;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: none;
+            background: #f8f9fa;
+        }
+
+        .code-editor:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .output-display {
+            flex: 1;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-run {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-run:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-clear {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: #5a6268;
+        }
+
+        .success-message {
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        .error-message {
+            color: #f44336;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .code-output-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="company-name">DevCorp Solutions</div>
+            <div class="tagline">Centro de Excelência em Desenvolvimento</div>
+        </header>
+
+        <section class="supervisor-section">
+            <div class="supervisor-avatar">J</div>
+            <div class="supervisor-message">
+                <div class="supervisor-name">Johannah Santana</div>
+                <div class="supervisor-role">Supervisora de Desenvolvimento</div>
+                <div class="message-text" id="supervisorMessage">
+                    Olá! Bem-vindo ao seu primeiro dia. Preparei uma série de exercícios sobre Functions em JavaScript. Comece pelo básico e vamos evoluir juntos. Cada exercício tem um tutorial completo e exemplos práticos. Clique em um exercício para começar!
+                </div>
+            </div>
+        </section>
+
+        <main class="main-content">
+            <aside class="exercises-panel">
+                <h2 class="exercises-title">📋 Tarefas Atribuídas</h2>
+                <div id="exercisesList"></div>
+            </aside>
+
+            <section class="workspace">
+                <div id="tutorialSection" class="tutorial-section" style="display: none;">
+                    <div class="tutorial-title">📚 Tutorial</div>
+                    <div class="tutorial-content" id="tutorialContent"></div>
+                    <div>
+                        <button class="btn-show-example" onclick="showExample()">💡 Ver Exemplo Resolvido</button>
+                        <button class="btn-close-tutorial" onclick="closeTutorial()">❌ Fechar Tutorial</button>
+                    </div>
+                </div>
+
+                <div class="exercise-description">
+                    <div class="description-title">📝 Descrição da Tarefa</div>
+                    <div class="description-text" id="exerciseDescription">
+                        Selecione um exercício da lista ao lado para começar.
+                    </div>
+                </div>
+
+                <div class="code-output-container">
+                    <div class="editor-section">
+                        <div class="section-title">💻 Editor de Código</div>
+                        <textarea class="code-editor" id="codeEditor" placeholder="// Digite seu código aqui..."></textarea>
+                        <div class="button-group">
+                            <button class="btn btn-run" onclick="runCode()">▶ Executar</button>
+                            <button class="btn btn-clear" onclick="clearEditor()">🗑️ Limpar</button>
+                        </div>
+                    </div>
+
+                    <div class="output-section">
+                        <div class="section-title">📊 Resultado</div>
+                        <div class="output-display" id="output">Aguardando execução...</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const exercises = [
+            {
+                id: 1,
+                title: "Primeira Function",
+                description: "Crie uma function chamada 'saudacao' que retorne a string 'Olá, DevCorp!'. Depois chame a função e exiba o resultado usando console.log().",
+                level: "básico",
+                tutorial: `<strong>O que é uma Function?</strong><br>
+                Uma function (função) é como uma receita: você escreve uma vez e pode usar várias vezes!<br><br>
+                
+                <strong>Estrutura básica:</strong><br>
+                function nomeDaFuncao() {<br>
+                &nbsp;&nbsp;// código aqui dentro<br>
+                &nbsp;&nbsp;return algumValor;<br>
+                }<br><br>
+                
+                <strong>Partes importantes:</strong>
+                <ul>
+                    <li><strong>function</strong> - palavra-chave que inicia a função</li>
+                    <li><strong>nomeDaFuncao</strong> - o nome que você escolhe</li>
+                    <li><strong>()</strong> - parênteses onde vão os parâmetros (vazio por enquanto)</li>
+                    <li><strong>{}</strong> - chaves que delimitam o código da função</li>
+                    <li><strong>return</strong> - devolve um valor quando chamamos a função</li>
+                </ul>
+                
+                <strong>Como chamar a função:</strong><br>
+                Depois de criar, você chama assim: nomeDaFuncao()`,
+                example: `// Criando a função
+function saudacao() {
+    return 'Olá, DevCorp!';
+}
+
+// Chamando a função e exibindo o resultado
+console.log(saudacao());`,
+                validation: (code) => code.includes('function') && code.includes('saudacao') && code.includes('return')
+            },
+            {
+                id: 2,
+                title: "Function com Parâmetro",
+                description: "Crie uma function chamada 'bomDia' que receba um nome como parâmetro e retorne 'Bom dia, [nome]!'. Teste com diferentes nomes.",
+                level: "básico",
+                tutorial: `<strong>O que são Parâmetros?</strong><br>
+                Parâmetros são como "espaços em branco" que você deixa na função para preencher depois!<br><br>
+                
+                <strong>Estrutura com parâmetro:</strong><br>
+                function nomeFuncao(parametro) {<br>
+                &nbsp;&nbsp;return 'Texto com ' + parametro;<br>
+                }<br><br>
+                
+                <strong>Como funciona:</strong>
+                <ul>
+                    <li>O parâmetro vai entre os parênteses ()</li>
+                    <li>Você pode usar esse parâmetro dentro da função</li>
+                    <li>Para juntar textos, use o sinal de + (concatenação)</li>
+                    <li>Quando chamar a função, passe o valor: nomeFuncao('valor')</li>
+                </ul>`,
+                example: `// Função com parâmetro
+function bomDia(nome) {
+    return 'Bom dia, ' + nome + '!';
+}
+
+// Testando com diferentes nomes
+console.log(bomDia('João'));
+console.log(bomDia('Maria'));
+console.log(bomDia('Johannah'));`,
+                validation: (code) => code.includes('function') && code.includes('bomDia') && code.includes('return')
+            },
+            {
+                id: 3,
+                title: "Calculadora Simples",
+                description: "Crie uma function chamada 'somar' que receba dois números como parâmetros e retorne a soma deles. Teste com console.log(somar(5, 3)).",
+                level: "básico",
+                tutorial: `<strong>Múltiplos Parâmetros</strong><br>
+                Você pode ter mais de um parâmetro! Basta separá-los com vírgula.<br><br>
+                
+                <strong>Estrutura:</strong><br>
+                function calcular(numero1, numero2) {<br>
+                &nbsp;&nbsp;return numero1 + numero2;<br>
+                }<br><br>
+                
+                <strong>Operadores matemáticos em JavaScript:</strong>
+                <ul>
+                    <li><strong>+</strong> - adição</li>
+                    <li><strong>-</strong> - subtração</li>
+                    <li><strong>*</strong> - multiplicação</li>
+                    <li><strong>/</strong> - divisão</li>
+                </ul>`,
+                example: `// Função que soma dois números
+function somar(a, b) {
+    return a + b;
+}
+
+// Testando a função
+console.log(somar(5, 3));  // Resultado: 8
+console.log(somar(10, 20)); // Resultado: 30
+console.log(somar(7, 15));  // Resultado: 22`,
+                validation: (code) => code.includes('function') && code.includes('somar') && code.includes('return')
+            },
+            {
+                id: 4,
+                title: "Subtração de Números",
+                description: "Crie uma function chamada 'subtrair' que receba dois números e retorne a subtração do primeiro pelo segundo. Teste com subtrair(10, 4).",
+                level: "básico",
+                tutorial: `<strong>Operação de Subtração</strong><br>
+                Funciona igual à soma, mas usa o operador - (menos).<br><br>
+                
+                <strong>Dica importante:</strong><br>
+                Na subtração, a ordem importa! 10 - 4 é diferente de 4 - 10.<br><br>
+                
+                O primeiro parâmetro menos o segundo parâmetro.`,
+                example: `// Função que subtrai números
+function subtrair(a, b) {
+    return a - b;
+}
+
+// Testando
+console.log(subtrair(10, 4));  // Resultado: 6
+console.log(subtrair(20, 5));  // Resultado: 15
+console.log(subtrair(100, 25)); // Resultado: 75`,
+                validation: (code) => code.includes('function') && code.includes('subtrair') && code.includes('return')
+            },
+            {
+                id: 5,
+                title: "Multiplicação",
+                description: "Crie uma function chamada 'multiplicar' que receba dois números e retorne a multiplicação entre eles. Use o operador *.",
+                level: "básico",
+                tutorial: `<strong>Multiplicação em JavaScript</strong><br>
+                Para multiplicar, usamos o asterisco *<br><br>
+                
+                <strong>Exemplo:</strong><br>
+                5 * 3 = 15<br>
+                10 * 2 = 20`,
+                example: `// Função de multiplicação
+function multiplicar(a, b) {
+    return a * b;
+}
+
+// Testando
+console.log(multiplicar(5, 3));   // Resultado: 15
+console.log(multiplicar(7, 8));   // Resultado: 56
+console.log(multiplicar(12, 4));  // Resultado: 48`,
+                validation: (code) => code.includes('function') && code.includes('multiplicar') && code.includes('return')
+            },
+            {
+                id: 6,
+                title: "Divisão",
+                description: "Crie uma function chamada 'dividir' que receba dois números e retorne a divisão do primeiro pelo segundo. Use o operador /.",
+                level: "básico",
+                tutorial: `<strong>Divisão em JavaScript</strong><br>
+                Para dividir, usamos a barra /<br><br>
+                
+                <strong>Exemplo:</strong><br>
+                10 / 2 = 5<br>
+                20 / 4 = 5`,
+                example: `// Função de divisão
+function dividir(a, b) {
+    return a / b;
+}
+
+// Testando
+console.log(dividir(10, 2));  // Resultado: 5
+console.log(dividir(20, 4));  // Resultado: 5
+console.log(dividir(15, 3));  // Resultado: 5`,
+                validation: (code) => code.includes('function') && code.includes('dividir') && code.includes('return')
+            },
+            {
+                id: 7,
+                title: "Function com Múltiplos Parâmetros",
+                description: "Crie uma function chamada 'apresentacao' que receba nome, idade e cargo, e retorne uma string formatada: 'Meu nome é [nome], tenho [idade] anos e sou [cargo].'",
+                level: "básico",
+                tutorial: `<strong>Juntando Vários Parâmetros</strong><br>
+                Você pode ter 3, 4 ou mais parâmetros!<br><br>
+                
+                <strong>Concatenação de strings:</strong><br>
+                Use o + para juntar textos e variáveis.<br><br>
+                
+                <strong>Exemplo:</strong><br>
+                'Olá ' + nome + ', você tem ' + idade + ' anos'`,
+                example: `// Função com três parâmetros
+function apresentacao(nome, idade, cargo) {
+    return 'Meu nome é ' + nome + ', tenho ' + idade + ' anos e sou ' + cargo + '.';
+}
+
+// Testando
+console.log(apresentacao('João', 25, 'Desenvolvedor'));
+console.log(apresentacao('Maria', 30, 'Designer'));`,
+                validation: (code) => code.includes('function') && code.includes('apresentacao') && code.includes('return')
+            },
+            {
+                id: 8,
+                title: "Verificar Número Par",
+                description: "Crie uma function chamada 'ehPar' que receba um número e retorne true se for par e false se for ímpar. Dica: use o operador % (resto da divisão).",
+                level: "básico",
+                tutorial: `<strong>Operador Módulo (%)</strong><br>
+                O % retorna o resto da divisão.<br><br>
+                
+                <strong>Exemplos:</strong>
+                <ul>
+                    <li>10 % 2 = 0 (par, pois divide exatamente)</li>
+                    <li>11 % 2 = 1 (ímpar, sobra 1)</li>
+                    <li>8 % 2 = 0 (par)</li>
+                    <li>7 % 2 = 1 (ímpar)</li>
+                </ul>
+                
+                <strong>Lógica:</strong><br>
+                Se numero % 2 == 0, então é par!`,
+                example: `// Verifica se número é par
+function ehPar(numero) {
+    return numero % 2 == 0;
+}
+
+// Testando
+console.log(ehPar(10));  // true (par)
+console.log(ehPar(7));   // false (ímpar)
+console.log(ehPar(20));  // true (par)
+console.log(ehPar(15));  // false (ímpar)`,
+                validation: (code) => code.includes('function') && code.includes('ehPar') && code.includes('%')
+            },
+            {
+                id: 9,
+                title: "Function com Condicional",
+                description: "Crie uma function chamada 'verificarIdade' que receba uma idade e retorne 'Maior de idade' se >= 18 ou 'Menor de idade' se < 18.",
+                level: "básico",
+                tutorial: `<strong>Condicionais - IF e ELSE</strong><br>
+                Permitem que o código tome decisões!<br><br>
+                
+                <strong>Estrutura:</strong><br>
+                if (condição) {<br>
+                &nbsp;&nbsp;// se verdadeiro<br>
+                } else {<br>
+                &nbsp;&nbsp;// se falso<br>
+                }<br><br>
+                
+                <strong>Operadores de comparação:</strong>
+                <ul>
+                    <li><strong>></strong> maior que</li>
+                    <li><strong><</strong> menor que</li>
+                    <li><strong>>=</strong> maior ou igual</li>
+                    <li><strong><=</strong> menor ou igual</li>
+                    <li><strong>==</strong> igual a</li>
+                </ul>`,
+                example: `// Função com if/else
+function verificarIdade(idade) {
+    if (idade >= 18) {
+        return 'Maior de idade';
+    } else {
+        return 'Menor de idade';
+    }
+}
+
+// Testando
+console.log(verificarIdade(20));  // Maior de idade
+console.log(verificarIdade(15));  // Menor de idade
+console.log(verificarIdade(18));  // Maior de idade`,
+                validation: (code) => code.includes('function') && code.includes('verificarIdade') && code.includes('if')
+            },
+            {
+                id: 10,
+                title: "Maior de Dois Números",
+                description: "Crie uma function chamada 'maiorNumero' que receba dois números e retorne o maior entre eles usando if/else.",
+                level: "básico",
+                tutorial: `<strong>Comparando Valores</strong><br>
+                Use if/else para comparar dois valores e decidir qual retornar.<br><br>
+                
+                <strong>Estrutura:</strong><br>
+                if (a > b) {<br>
+                &nbsp;&nbsp;return a;<br>
+                } else {<br>
+                &nbsp;&nbsp;return b;<br>
+                }`,
+                example: `// Retorna o maior número
+function maiorNumero(a, b) {
+    if (a > b) {
+        return a;
+    } else {
+        return b;
+    }
+}
+
+// Testando
+console.log(maiorNumero(10, 5));   // 10
+console.log(maiorNumero(3, 15));   // 15
+console.log(maiorNumero(100, 99)); // 100`,
+                validation: (code) => code.includes('function') && code.includes('maiorNumero') && code.includes('if')
+            },
+            {
+                id: 11,
+                title: "Nota de Aprovação",
+                description: "Crie uma function chamada 'avaliarNota' que receba uma nota de 0 a 10 e retorne 'Aprovado' se >= 7, ou 'Reprovado' se < 7.",
+                level: "básico",
+                tutorial: `<strong>Aplicando Condicionais em Situações Reais</strong><br>
+                Agora vamos usar if/else em um cenário prático: verificar aprovação.<br><br>
+                
+                <strong>Lógica:</strong><br>
+                Se nota >= 7 → Aprovado<br>
+                Se nota < 7 → Reprovado`,
+                example: `// Avalia se aluno foi aprovado
+function avaliarNota(nota) {
+    if (nota >= 7) {
+        return 'Aprovado';
+    } else {
+        return 'Reprovado';
+    }
+}
+
+// Testando
+console.log(avaliarNota(8));   // Aprovado
+console.log(avaliarNota(5));   // Reprovado
+console.log(avaliarNota(7));   // Aprovado
+console.log(avaliarNota(6.5)); // Reprovado`,
+                validation: (code) => code.includes('function') && code.includes('avaliarNota') && code.includes('if')
+            },
+            {
+                id: 12,
+                title: "Saudação por Período",
+                description: "Crie uma function 'saudacaoPeriodo' que receba um número de 0 a 23 (hora) e retorne 'Bom dia' (5-11), 'Boa tarde' (12-17) ou 'Boa noite' (18-23 ou 0-4).",
+                level: "básico",
+                tutorial: `<strong>Múltiplas Condições - ELSE IF</strong><br>
+                Quando temos mais de 2 opções, usamos else if!<br><br>
+                
+                <strong>Estrutura:</strong><br>
+                if (condição1) {<br>
+                &nbsp;&nbsp;// opção 1<br>
+                } else if (condição2) {<br>
+                &nbsp;&nbsp;// opção 2<br>
+                } else {<br>
+                &nbsp;&nbsp;// opção 3<br>
+                }<br><br>
+                
+                <strong>Operador E (&&):</strong><br>
+                Para verificar se DUAS condições são verdadeiras ao mesmo tempo.<br>
+                Exemplo: hora >= 5 && hora <= 11`,
+                example: `// Saudação baseada na hora
+function saudacaoPeriodo(hora) {
+    if (hora >= 5 && hora <= 11) {
+        return 'Bom dia';
+    } else if (hora >= 12 && hora <= 17) {
+        return 'Boa tarde';
+    } else {
+        return 'Boa noite';
+    }
+}
+
+// Testando
+console.log(saudacaoPeriodo(9));   // Bom dia
+console.log(saudacaoPeriodo(14));  // Boa tarde
+console.log(saudacaoPeriodo(20));  // Boa noite
+console.log(saudacaoPeriodo(2));   // Boa noite`,
+                validation: (code) => code.includes('function') && code.includes('saudacaoPeriodo') && code.includes('if') && code.includes('else')
+            },
+            {
+                id: 13,
+                title: "Calculadora de Área",
+                description: "Crie uma function 'calcularArea' que receba largura e altura, e retorne a área de um retângulo (largura * altura).",
+                level: "básico",
+                tutorial: `<strong>Aplicação Prática de Funções</strong><br>
+                Vamos calcular a área de um retângulo!<br><br>
+                
+                <strong>Fórmula:</strong><br>
+                Área = largura × altura<br><br>
+                
+                <strong>Em código:</strong><br>
+                return largura * altura;`,
+                example: `// Calcula área do retângulo
+function calcularArea(largura, altura) {
+    return largura * altura;
+}
+
+// Testando
+console.log(calcularArea(5, 10));  // 50
+console.log(calcularArea(7, 3));   // 21
+console.log(calcularArea(12, 8));  // 96`,
+                validation: (code) => code.includes('function') && code.includes('calcularArea') && code.includes('*')
+            },
+            {
+                id: 14,
+                title: "Cálculo de Desconto",
+                description: "Crie uma function 'aplicarDesconto' que receba o preço e a porcentagem de desconto, e retorne o preço final. Ex: aplicarDesconto(100, 10) deve retornar 90.",
+                level: "básico",
+                tutorial: `<strong>Calculando Porcentagens</strong><br>
+                Para calcular desconto, precisamos:<br><br>
+                
+                1. Calcular o valor do desconto: preco * (porcentagem / 100)<br>
+                2. Subtrair do preço original<br><br>
+                
+                <strong>Fórmula:</strong><br>
+                valorDesconto = preco * (desconto / 100)<br>
+                precoFinal = preco - valorDesconto<br><br>
+                
+                Ou em uma linha:<br>
+                return preco - (preco * desconto / 100);`,
+                example: `// Aplica desconto ao preço
+function aplicarDesconto(preco, desconto) {
+    let valorDesconto = preco * (desconto / 100);
+    return preco - valorDesconto;
+}
+
+// Testando
+console.log(aplicarDesconto(100, 10));  // 90
+console.log(aplicarDesconto(200, 25));  // 150
+console.log(aplicarDesconto(50, 20));   // 40`,
+                validation: (code) => code.includes('function') && code.includes('aplicarDesconto') && code.includes('return')
+            },
+            {
+                id: 15,
+                title: "Tabuada",
+                description: "Crie uma function 'tabuada' que receba um número e exiba no console a tabuada de 1 a 10 desse número. Use um loop for.",
+                level: "básico",
+                tutorial: `<strong>Loop FOR - Repetição</strong><br>
+                O loop for permite repetir código várias vezes!<br><br>
+                
+                <strong>Estrutura:</strong><br>
+                for (inicialização; condição; incremento) {<br>
+                &nbsp;&nbsp;// código que repete<br>
+                }<br><br>
+                
+                <strong>Exemplo:</strong><br>
+                for (let i = 1; i <= 10; i++) {<br>
+                &nbsp;&nbsp;console.log(i);<br>
+                }<br><br>
+                
+                <strong>Explicação:</strong>
+                <ul>
+                    <li><strong>let i = 1</strong> - começa com i valendo 1</li>
+                    <li><strong>i <= 10</strong> - repete enquanto i for menor ou igual a 10</li>
+                    <li><strong>i++</strong> - aumenta i em 1 a cada repetição</li>
+                </ul>`,
+                example: `// Exibe tabuada de um número
+function tabuada(numero) {
+    for (let i = 1; i <= 10; i++) {
+        console.log(numero + ' x ' + i + ' = ' + (numero * i));
+    }
+}
+
+// Testando
+tabuada(5);
+// Resultado:
+// 5 x 1 = 5
+// 5 x 2 = 10
+// 5 x 3 = 15
+// ... até 5 x 10 = 50`,
+                validation: (code) => code.includes('function') && code.includes('tabuada') && code.includes('for')
+            },
+            {
+                id: 16,
+                title: "Arrow Function Básica",
+                description: "Converta esta function para arrow function: function dobro(num) { return num * 2; }. Teste o resultado.",
+                level: "básico",
+                tutorial: `<strong>Arrow Functions - Sintaxe Moderna</strong><br>
+                Arrow functions (=>) são uma forma mais curta de escrever funções!<br><br>
+                
+                <strong>Sintaxe tradicional:</strong><br>
+                function nome(parametro) {<br>
+                &nbsp;&nbsp;return valor;<br>
+                }<br><br>
+                
+                <strong>Sintaxe arrow function:</strong><br>
+                const nome = (parametro) => {<br>
+                &nbsp;&nbsp;return valor;<br>
+                }<br><br>
+                
+                <strong>Forma ainda mais curta (quando tem só return):</strong><br>
+                const nome = (parametro) => valor;<br><br>
+                
+                <strong>Diferenças principais:</strong>
+                <ul>
+                    <li>Use <strong>const</strong> ou <strong>let</strong> em vez de function</li>
+                    <li>Usa a seta <strong>=></strong></li>
+                    <li>Se tem só um return, pode omitir chaves e return</li>
+                </ul>`,
+                example: `// Forma tradicional
+function dobro(num) {
+    return num * 2;
+}
+
+// Arrow function completa
+const dobro = (num) => {
+    return num * 2;
+};
+
+// Arrow function curta (só com return)
+const dobro = (num) => num * 2;
+
+// Testando
+console.log(dobro(5));   // 10
+console.log(dobro(10));  // 20`,
+                validation: (code) => code.includes('=>') && code.includes('dobro')
+            },
+            {
+                id: 17,
+                title: "Arrow Function - Saudação",
+                description: "Crie uma arrow function chamada 'ola' que receba um nome e retorne 'Olá, [nome]!'. Use a sintaxe curta.",
+                level: "básico",
+                tutorial: `<strong>Praticando Arrow Functions</strong><br>
+                Agora você vai criar sua própria arrow function!<br><br>
+                
+                <strong>Lembre-se:</strong><br>
+                const nome = (parametro) => 'texto com ' + parametro;`,
+                example: `// Arrow function que saúda
+const ola = (nome) => 'Olá, ' + nome + '!';
+
+// Testando
+console.log(ola('João'));      // Olá, João!
+console.log(ola('Maria'));     // Olá, Maria!
+console.log(ola('Johannah'));  // Olá, Johannah!`,
+                validation: (code) => code.includes('=>') && code.includes('ola')
+            },
+            {
+                id: 18,
+                title: "Function com Array",
+                description: "Crie uma function chamada 'primeiroItem' que receba um array e retorne o primeiro elemento. Teste com [1, 2, 3, 4].",
+                level: "básico",
+                tutorial: `<strong>Arrays - Listas de Valores</strong><br>
+                Arrays são como listas que guardam vários valores!<br><br>
+                
+                <strong>Criando um array:</strong><br>
+                let numeros = [1, 2, 3, 4, 5];<br><br>
+                
+                <strong>Acessando elementos:</strong>
+                <ul>
+                    <li>Primeiro elemento: array[0]</li>
+                    <li>Segundo elemento: array[1]</li>
+                    <li>Terceiro elemento: array[2]</li>
+                </ul>
+                
+                <strong>Importante:</strong> Arrays começam no índice 0!`,
+                example: `// Retorna primeiro elemento do array
+function primeiroItem(array) {
+    return array[0];
+}
+
+// Testando
+console.log(primeiroItem([1, 2, 3, 4]));        // 1
+console.log(primeiroItem([10, 20, 30]));        // 10
+console.log(primeiroItem(['a', 'b', 'c']));     // a`,
+                validation: (code) => code.includes('function') && code.includes('primeiroItem') && code.includes('[0]')
+            },
+            {
+                id: 19,
+                title: "Último Item do Array",
+                description: "Crie uma function 'ultimoItem' que receba um array e retorne o último elemento. Dica: use array.length - 1.",
+                level: "básico",
+                tutorial: `<strong>Propriedade Length</strong><br>
+                Todo array tem uma propriedade chamada length que indica quantos elementos existem.<br><br>
+                
+                <strong>Exemplo:</strong><br>
+                let lista = [1, 2, 3, 4, 5];<br>
+                console.log(lista.length); // 5<br><br>
+                
+                <strong>Para pegar o último:</strong><br>
+                O último índice é sempre length - 1<br>
+                array[array.length - 1]`,
+                example: `// Retorna último elemento do array
+function ultimoItem(array) {
+    return array[array.length - 1];
+}
+
+// Testando
+console.log(ultimoItem([1, 2, 3, 4]));      // 4
+console.log(ultimoItem([10, 20, 30]));      // 30
+console.log(ultimoItem(['a', 'b', 'c']));   // c`,
+                validation: (code) => code.includes('function') && code.includes('ultimoItem') && code.includes('length')
+            },
+            {
+                id: 20,
+                title: "Contador Simples",
+                description: "Crie uma function chamada 'contarAte' que receba um número e use um loop para exibir no console todos os números de 1 até esse número.",
+                level: "básico",
+                tutorial: `<strong>Praticando Loops</strong><br>
+                Vamos usar o for para contar de 1 até um número!<br><br>
+                
+                <strong>Estrutura:</strong><br>
+                for (let i = 1; i <= numero; i++) {<br>
+                &nbsp;&nbsp;console.log(i);<br>
+                }`,
+                example: `// Conta de 1 até o número
+function contarAte(numero) {
+    for (let i = 1; i <= numero; i++) {
+        console.log(i);
+    }
+}
+
+// Testando
+contarAte(5);
+// Resultado:
+// 1
+// 2
+// 3
+// 4
+// 5`,
+                validation: (code) => code.includes('function') && code.includes('contarAte') && code.includes('for')
+            },
+            {
+                id: 21,
+                title: "Concatenar Nome Completo",
+                description: "Crie uma function 'nomeCompleto' que receba nome e sobrenome como parâmetros e retorne o nome completo. Ex: nomeCompleto('João', 'Silva') deve retornar 'João Silva'.",
+                level: "básico",
+                tutorial: `<strong>Juntando Strings (Textos)</strong><br>
+                Você pode juntar textos usando o operador +<br><br>
+                
+                <strong>Exemplos de concatenação:</strong>
+                <ul>
+                    <li>'Olá' + ' ' + 'Mundo' = 'Olá Mundo'</li>
+                    <li>'JavaScript' + ' é ' + 'incrível' = 'JavaScript é incrível'</li>
+                </ul>
+                
+                <strong>Dica:</strong> Não esqueça de colocar um espaço entre as palavras!`,
+                example: `// Junta nome e sobrenome
+function nomeCompleto(nome, sobrenome) {
+    return nome + ' ' + sobrenome;
+}
+
+// Testando
+console.log(nomeCompleto('João', 'Silva'));
+console.log(nomeCompleto('Maria', 'Santos'));
+console.log(nomeCompleto('Pedro', 'Oliveira'));`,
+                validation: (code) => code.includes('function') && code.includes('nomeCompleto') && code.includes('+')
+            },
+            {
+                id: 22,
+                title: "Triplo de um Número",
+                description: "Crie uma function 'triplo' que receba um número e retorne o triplo dele (número * 3).",
+                level: "básico",
+                tutorial: `<strong>Multiplicação Simples</strong><br>
+                Para obter o triplo, basta multiplicar por 3!<br><br>
+                
+                <strong>Fórmula:</strong><br>
+                triplo = numero * 3<br><br>
+                
+                <strong>Exemplos:</strong><br>
+                5 * 3 = 15<br>
+                10 * 3 = 30`,
+                example: `// Retorna o triplo do número
+function triplo(numero) {
+    return numero * 3;
+}
+
+// Testando
+console.log(triplo(5));   // 15
+console.log(triplo(10));  // 30
+console.log(triplo(7));   // 21`,
+                validation: (code) => code.includes('function') && code.includes('triplo') && code.includes('* 3')
+            },
+            {
+                id: 23,
+                title: "Verificar Positivo ou Negativo",
+                description: "Crie uma function 'tipoNumero' que receba um número e retorne 'Positivo' se for maior que zero, 'Negativo' se for menor que zero, ou 'Zero' se for igual a zero.",
+                level: "básico",
+                tutorial: `<strong>Múltiplas Condições</strong><br>
+                Aqui temos 3 possibilidades!<br><br>
+                
+                <strong>Lógica:</strong>
+                <ul>
+                    <li>Se numero > 0 → Positivo</li>
+                    <li>Se numero < 0 → Negativo</li>
+                    <li>Se numero == 0 → Zero</li>
+                </ul>
+                
+                Use if, else if, else para cobrir todas as opções!`,
+                example: `// Verifica tipo do número
+function tipoNumero(numero) {
+    if (numero > 0) {
+        return 'Positivo';
+    } else if (numero < 0) {
+        return 'Negativo';
+    } else {
+        return 'Zero';
+    }
+}
+
+// Testando
+console.log(tipoNumero(10));   // Positivo
+console.log(tipoNumero(-5));   // Negativo
+console.log(tipoNumero(0));    // Zero`,
+                validation: (code) => code.includes('function') && code.includes('tipoNumero') && code.includes('if') && code.includes('else')
+            },
+            {
+                id: 24,
+                title: "Média de Dois Números",
+                description: "Crie uma function 'calcularMedia' que receba dois números e retorne a média entre eles. Média = (numero1 + numero2) / 2.",
+                level: "básico",
+                tutorial: `<strong>Calculando Média</strong><br>
+                Para calcular a média de dois números, você soma e divide por 2!<br><br>
+                
+                <strong>Fórmula:</strong><br>
+                media = (numero1 + numero2) / 2<br><br>
+                
+                <strong>Exemplo:</strong><br>
+                Média de 8 e 6 = (8 + 6) / 2 = 14 / 2 = 7<br><br>
+                
+                <strong>Importante:</strong> Use parênteses para somar primeiro, depois dividir!`,
+                example: `// Calcula média de dois números
+function calcularMedia(a, b) {
+    return (a + b) / 2;
+}
+
+// Testando
+console.log(calcularMedia(8, 6));    // 7
+console.log(calcularMedia(10, 20));  // 15
+console.log(calcularMedia(5, 9));    // 7`,
+                validation: (code) => code.includes('function') && code.includes('calcularMedia') && code.includes('+') && code.includes('/')
+            },
+            {
+                id: 25,
+                title: "Quadrado de um Número",
+                description: "Crie uma function 'quadrado' que receba um número e retorne o quadrado dele (número * número).",
+                level: "básico",
+                tutorial: `<strong>Potenciação - Quadrado</strong><br>
+                O quadrado de um número é ele multiplicado por ele mesmo!<br><br>
+                
+                <strong>Fórmula:</strong><br>
+                quadrado = numero * numero<br><br>
+                
+                <strong>Exemplos:</strong>
+                <ul>
+                    <li>3² = 3 * 3 = 9</li>
+                    <li>5² = 5 * 5 = 25</li>
+                    <li>10² = 10 * 10 = 100</li>
+                </ul>`,
+                example: `// Retorna o quadrado do número
+function quadrado(numero) {
+    return numero * numero;
+}
+
+// Testando
+console.log(quadrado(3));   // 9
+console.log(quadrado(5));   // 25
+console.log(quadrado(10));  // 100`,
+                validation: (code) => code.includes('function') && code.includes('quadrado') && code.includes('*')
+            },
+            {
+                id: 26,
+                title: "Verificar Maioridade",
+                description: "Crie uma function 'podeDirigir' que receba a idade e retorne true se >= 18 ou false se < 18.",
+                level: "básico",
+                tutorial: `<strong>Retornando Booleanos (true/false)</strong><br>
+                Funções podem retornar true ou false diretamente!<br><br>
+                
+                <strong>Forma simples:</strong><br>
+                return idade >= 18;<br><br>
+                
+                Isso já retorna true ou false automaticamente!<br>
+                Não precisa de if/else nesse caso.`,
+                example: `// Verifica se pode dirigir
+function podeDirigir(idade) {
+    return idade >= 18;
+}
+
+// Testando
+console.log(podeDirigir(20));  // true
+console.log(podeDirigir(16));  // false
+console.log(podeDirigir(18));  // true`,
+                validation: (code) => code.includes('function') && code.includes('podeDirigir') && code.includes('>=')
+            },
+            {
+                id: 27,
+                title: "Somar Três Números",
+                description: "Crie uma function 'somarTres' que receba três números e retorne a soma dos três.",
+                level: "básico",
+                tutorial: `<strong>Múltiplos Parâmetros</strong><br>
+                Você pode ter quantos parâmetros precisar!<br><br>
+                
+                <strong>Estrutura:</strong><br>
+                function nome(param1, param2, param3) {<br>
+                &nbsp;&nbsp;return param1 + param2 + param3;<br>
+                }<br><br>
+                
+                Basta separá-los com vírgula e somar todos!`,
+                example: `// Soma três números
+function somarTres(a, b, c) {
+    return a + b + c;
+}
+
+// Testando
+console.log(somarTres(1, 2, 3));      // 6
+console.log(somarTres(10, 20, 30));   // 60
+console.log(somarTres(5, 15, 25));    // 45`,
+                validation: (code) => code.includes('function') && code.includes('somarTres') && code.includes('+')
+            },
+            {
+                id: 28,
+                title: "Converter Celsius para Fahrenheit",
+                description: "Crie uma function 'celsiusParaFahrenheit' que receba temperatura em Celsius e retorne em Fahrenheit. Fórmula: (celsius * 9/5) + 32.",
+                level: "básico",
+                tutorial: `<strong>Conversão de Temperatura</strong><br>
+                Uma aplicação prática de matemática em programação!<br><br>
+                
+                <strong>Fórmula:</strong><br>
+                fahrenheit = (celsius * 9/5) + 32<br><br>
+                
+                <strong>Exemplo:</strong><br>
+                0°C = (0 * 9/5) + 32 = 32°F<br>
+                100°C = (100 * 9/5) + 32 = 212°F`,
+                example: `// Converte Celsius para Fahrenheit
+function celsiusParaFahrenheit(celsius) {
+    return (celsius * 9/5) + 32;
+}
+
+// Testando
+console.log(celsiusParaFahrenheit(0));    // 32
+console.log(celsiusParaFahrenheit(100));  // 212
+console.log(celsiusParaFahrenheit(25));   // 77`,
+                validation: (code) => code.includes('function') && code.includes('celsiusParaFahrenheit') && code.includes('*') && code.includes('/')
+            },
+            {
+                id: 29,
+                title: "Verificar Número Ímpar",
+                description: "Crie uma function 'ehImpar' que receba um número e retorne true se for ímpar e false se for par. Use o operador %.",
+                level: "básico",
+                tutorial: `<strong>Verificando Números Ímpares</strong><br>
+                Se o número NÃO é par, então é ímpar!<br><br>
+                
+                <strong>Lógica:</strong><br>
+                Se numero % 2 == 1, então é ímpar!<br>
+                Ou: Se numero % 2 != 0, então é ímpar!<br><br>
+                
+                <strong>Exemplos:</strong>
+                <ul>
+                    <li>7 % 2 = 1 (ímpar)</li>
+                    <li>9 % 2 = 1 (ímpar)</li>
+                    <li>4 % 2 = 0 (par)</li>
+                </ul>`,
+                example: `// Verifica se número é ímpar
+function ehImpar(numero) {
+    return numero % 2 != 0;
+}
+
+// Testando
+console.log(ehImpar(7));   // true (ímpar)
+console.log(ehImpar(10));  // false (par)
+console.log(ehImpar(15));  // true (ímpar)
+console.log(ehImpar(8));   // false (par)`,
+                validation: (code) => code.includes('function') && code.includes('ehImpar') && code.includes('%')
+            },
+            {
+                id: 30,
+                title: "Repetir String",
+                description: "Crie uma function 'repetir' que receba uma string e um número, e use um loop para exibir a string esse número de vezes.",
+                level: "básico",
+                tutorial: `<strong>Loop com Strings</strong><br>
+                Você pode usar loops para repetir textos!<br><br>
+                
+                <strong>Estrutura:</strong><br>
+                for (let i = 0; i < quantidade; i++) {<br>
+                &nbsp;&nbsp;console.log(texto);<br>
+                }<br><br>
+                
+                <strong>Dica:</strong> O loop começa em 0 e vai até quantidade-1`,
+                example: `// Repete string várias vezes
+function repetir(texto, vezes) {
+    for (let i = 0; i < vezes; i++) {
+        console.log(texto);
+    }
+}
+
+// Testando
+repetir('JavaScript!', 3);
+// Resultado:
+// JavaScript!
+// JavaScript!
+// JavaScript!`,
+                validation: (code) => code.includes('function') && code.includes('repetir') && code.includes('for')
+            },
+            {
+                id: 31,
+                title: "Calcular Perímetro Retângulo",
+                description: "Crie uma function 'calcularPerimetro' que receba largura e altura de um retângulo e retorne o perímetro. Perímetro = 2 * (largura + altura).",
+                level: "básico",
+                tutorial: `<strong>Geometria - Perímetro</strong><br>
+                O perímetro é a soma de todos os lados!<br><br>
+                
+                <strong>Fórmula do retângulo:</strong><br>
+                perimetro = 2 * (largura + altura)<br><br>
+                
+                <strong>Por quê?</strong><br>
+                Um retângulo tem 2 lados de largura e 2 de altura.<br>
+                Então: largura + largura + altura + altura = 2 * (largura + altura)`,
+                example: `// Calcula perímetro do retângulo
+function calcularPerimetro(largura, altura) {
+    return 2 * (largura + altura);
+}
+
+// Testando
+console.log(calcularPerimetro(5, 10));  // 30
+console.log(calcularPerimetro(7, 3));   // 20
+console.log(calcularPerimetro(8, 8));   // 32`,
+                validation: (code) => code.includes('function') && code.includes('calcularPerimetro') && code.includes('*')
+            },
+            {
+                id: 32,
+                title: "Maior de Três Números",
+                description: "Crie uma function 'maiorDeTres' que receba três números e retorne o maior entre eles usando if/else.",
+                level: "básico",
+                tutorial: `<strong>Comparando Três Valores</strong><br>
+                Para encontrar o maior de três, compare dois por dois!<br><br>
+                
+                <strong>Lógica:</strong><br>
+                1. Se a >= b E a >= c, então a é o maior<br>
+                2. Senão se b >= c, então b é o maior<br>
+                3. Senão, c é o maior<br><br>
+                
+                <strong>Operador E:</strong> && (ambas condições devem ser verdadeiras)`,
+                example: `// Retorna o maior de três números
+function maiorDeTres(a, b, c) {
+    if (a >= b && a >= c) {
+        return a;
+    } else if (b >= c) {
+        return b;
+    } else {
+        return c;
+    }
+}
+
+// Testando
+console.log(maiorDeTres(10, 5, 8));   // 10
+console.log(maiorDeTres(3, 15, 7));   // 15
+console.log(maiorDeTres(4, 2, 20));   // 20`,
+                validation: (code) => code.includes('function') && code.includes('maiorDeTres') && code.includes('if') && code.includes('&&')
+            },
+            {
+                id: 33,
+                title: "Dias em Horas",
+                description: "Crie uma function 'diasParaHoras' que receba um número de dias e retorne quantas horas existem. 1 dia = 24 horas.",
+                level: "básico",
+                tutorial: `<strong>Conversão de Unidades</strong><br>
+                Para converter dias em horas, multiplique por 24!<br><br>
+                
+                <strong>Fórmula:</strong><br>
+                horas = dias * 24<br><br>
+                
+                <strong>Exemplos:</strong>
+                <ul>
+                    <li>1 dia = 24 horas</li>
+                    <li>2 dias = 48 horas</li>
+                    <li>7 dias = 168 horas</li>
+                </ul>`,
+                example: `// Converte dias para horas
+function diasParaHoras(dias) {
+    return dias * 24;
+}
+
+// Testando
+console.log(diasParaHoras(1));   // 24
+console.log(diasParaHoras(2));   // 48
+console.log(diasParaHoras(7));   // 168`,
+                validation: (code) => code.includes('function') && code.includes('diasParaHoras') && code.includes('* 24')
+            },
+            {
+                id: 34,
+                title: "Verificar Divisível por 5",
+                description: "Crie uma function 'divisivelPorCinco' que receba um número e retorne true se for divisível por 5, false caso contrário.",
+                level: "básico",
+                tutorial: `<strong>Verificando Divisibilidade</strong><br>
+                Um número é divisível por 5 se o resto da divisão for zero!<br><br>
+                
+                <strong>Lógica:</strong><br>
+                return numero % 5 == 0;<br><br>
+                
+                <strong>Exemplos:</strong>
+                <ul>
+                    <li>10 % 5 = 0 (divisível)</li>
+                    <li>15 % 5 = 0 (divisível)</li>
+                    <li>7 % 5 = 2 (não divisível)</li>
+                </ul>`,
+                example: `// Verifica se é divisível por 5
+function divisivelPorCinco(numero) {
+    return numero % 5 == 0;
+}
+
+// Testando
+console.log(divisivelPorCinco(10));  // true
+console.log(divisivelPorCinco(15));  // true
+console.log(divisivelPorCinco(7));   // false
+console.log(divisivelPorCinco(25));  // true`,
+                validation: (code) => code.includes('function') && code.includes('divisivelPorCinco') && code.includes('%')
+            },
+            {
+                id: 35,
+                title: "Contar de 10 até 1",
+                description: "Crie uma function 'contagemRegressiva' que use um loop para exibir os números de 10 até 1 no console (ordem decrescente).",
+                level: "básico",
+                tutorial: `<strong>Loop Decrescente</strong><br>
+                Para contar de trás para frente, diminuímos o contador!<br><br>
+                
+                <strong>Estrutura:</strong><br>
+                for (let i = 10; i >= 1; i--) {<br>
+                &nbsp;&nbsp;console.log(i);<br>
+                }<br><br>
+                
+                <strong>Explicação:</strong>
+                <ul>
+                    <li><strong>i = 10</strong> - começa no 10</li>
+                    <li><strong>i >= 1</strong> - continua até 1</li>
+                    <li><strong>i--</strong> - diminui 1 a cada volta</li>
+                </ul>`,
+                example: `// Contagem regressiva de 10 a 1
+function contagemRegressiva() {
+    for (let i = 10; i >= 1; i--) {
+        console.log(i);
+    }
+}
+
+// Testando
+contagemRegressiva();
+// Resultado:
+// 10
+// 9
+// 8
+// ...
+// 1`,
+                validation: (code) => code.includes('function') && code.includes('contagemRegressiva') && code.includes('for') && code.includes('--')
+            }
+        ];
+
+        let currentExercise = null;
+        let completedExercises = {};
+
+        function loadProgress() {
+            const saved = {};
+            exercises.forEach(ex => {
+                const savedCode = localStorage.getItem(`exercise_${ex.id}_code`);
+                const isCompleted = localStorage.getItem(`exercise_${ex.id}_completed`);
+                
+                if (savedCode) saved[`code_${ex.id}`] = savedCode;
+                if (isCompleted) completedExercises[ex.id] = true;
+            });
+            return saved;
+        }
+
+        function saveProgress(exerciseId, code, completed = false) {
+            localStorage.setItem(`exercise_${exerciseId}_code`, code);
+            if (completed) {
+                localStorage.setItem(`exercise_${exerciseId}_completed`, 'true');
+                completedExercises[exerciseId] = true;
+            }
+        }
+
+        function renderExercises() {
+            const container = document.getElementById('exercisesList');
+            container.innerHTML = exercises.map(ex => `
+                <div class="exercise-item ${completedExercises[ex.id] ? 'completed' : ''}" onclick="selectExercise(${ex.id})">
+                    <div class="exercise-info">
+                        <div class="exercise-number">Tarefa #${ex.id} - ${ex.level.toUpperCase()}</div>
+                        <div class="exercise-title">${ex.title}</div>
+                    </div>
+                    <div class="check-mark">✓</div>
+                </div>
+            `).join('');
+        }
+
+        function selectExercise(id) {
+            currentExercise = exercises.find(ex => ex.id === id);
+            
+            document.querySelectorAll('.exercise-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.exercise-item').classList.add('active');
+
+            const messages = [
+                `Ótimo! Vamos trabalhar na tarefa "${currentExercise.title}". Leia o tutorial com atenção e depois resolva o exercício. Se tiver dúvidas, veja o exemplo!`,
+                `Perfeito! A tarefa "${currentExercise.title}" é importante para seu desenvolvimento. Estude o tutorial antes de começar!`,
+                `Excelente escolha! "${currentExercise.title}" vai te ensinar conceitos fundamentais. Leia tudo e não tenha pressa!`,
+                `Muito bem! Hora de resolver "${currentExercise.title}". O tutorial explica tudo detalhadamente. Qualquer dúvida, clique em "Ver Exemplo"!`
+            ];
+            
+            document.getElementById('supervisorMessage').textContent = messages[Math.floor(Math.random() * messages.length)];
+            document.getElementById('exerciseDescription').textContent = currentExercise.description;
+            
+            // Mostra tutorial
+            const tutorialSection = document.getElementById('tutorialSection');
+            tutorialSection.style.display = 'block';
+            document.getElementById('tutorialContent').innerHTML = currentExercise.tutorial;
+            
+            const savedCode = localStorage.getItem(`exercise_${id}_code`);
+            document.getElementById('codeEditor').value = savedCode || '';
+            document.getElementById('output').textContent = 'Aguardando execução...';
+        }
+
+        function showExample() {
+            if (!currentExercise) return;
+            
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                padding: 20px;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; padding: 30px; border-radius: 15px; max-width: 700px; width: 100%;">
+                    <h2 style="color: #2d3561; margin-bottom: 20px;">💡 Exemplo Resolvido - ${currentExercise.title}</h2>
+                    <div class="example-box">
+                        <span class="example-label">Solução Completa:</span>
+                        ${currentExercise.example}
+                    </div>
+                    <div style="margin-top: 20px; display: flex; gap: 10px;">
+                        <button class="btn-copy-example" onclick="copyExample()">📋 Copiar para o Editor</button>
+                        <button class="btn btn-clear" onclick="this.closest('div').parentElement.parentElement.remove()" style="flex: 1;">Fechar</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.onclick = (e) => {
+                if (e.target === modal) modal.remove();
+            };
+        }
+
+        function copyExample() {
+            if (!currentExercise) return;
+            
+            // Remove espaços extras e garante que o código está limpo
+            const cleanCode = currentExercise.example.trim();
+            document.getElementById('codeEditor').value = cleanCode;
+            
+            document.querySelectorAll('[style*="position: fixed"]').forEach(el => el.remove());
+            
+            document.getElementById('supervisorMessage').textContent = 
+                'Exemplo copiado! Agora clique em "Executar" para ver o resultado. Depois tente fazer modificações para aprender melhor!';
+        }
+
+        function closeTutorial() {
+            document.getElementById('tutorialSection').style.display = 'none';
+            document.getElementById('supervisorMessage').textContent = 
+                'Tutorial fechado! Agora é com você. Lembre-se: você pode reabrir o tutorial clicando novamente no exercício. Boa sorte!';
+        }
+
+        function runCode() {
+            const code = document.getElementById('codeEditor').value.trim();
+            const output = document.getElementById('output');
+            
+            if (!currentExercise) {
+                output.innerHTML = '<span class="error-message">❌ Selecione um exercício primeiro!</span>';
+                return;
+            }
+
+            if (!code) {
+                output.innerHTML = '<span class="error-message">❌ Digite algum código antes de executar!</span>';
+                return;
+            }
+
+            saveProgress(currentExercise.id, code);
+
+            const originalLog = console.log;
+            let logs = [];
+            
+            console.log = (...args) => {
+                logs.push(args.map(arg => 
+                    typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+                ).join(' '));
+            };
+
+            try {
+                eval(code);
+                
+                const isValid = currentExercise.validation(code);
+                
+                if (logs.length === 0) {
+                    logs.push('✓ Código executado com sucesso!');
+                }
+                
+                if (isValid) {
+                    logs.push('\n✅ TAREFA CONCLUÍDA! Excelente trabalho!');
+                    saveProgress(currentExercise.id, code, true);
+                    renderExercises();
+                    
+                    const completionMessages = [
+                        'Parabéns! Você completou a tarefa com sucesso. Continue assim!',
+                        'Excelente trabalho! Sua dedicação está sendo notada. Próxima tarefa!',
+                        'Muito bem executado! Você está progredindo rapidamente. Continue!',
+                        'Perfeito! Mais uma tarefa concluída. Seu desenvolvimento está ótimo!'
+                    ];
+                    document.getElementById('supervisorMessage').textContent = completionMessages[Math.floor(Math.random() * completionMessages.length)];
+                }
+                
+                output.innerHTML = logs.join('\n');
+            } catch (error) {
+                output.innerHTML = `<span class="error-message">❌ Erro: ${error.message}\n\nDica: Verifique se você fechou todas as chaves {} e parênteses () corretamente!</span>`;
+            } finally {
+                console.log = originalLog;
+            }
+        }
+
+        function clearEditor() {
+            document.getElementById('codeEditor').value = '';
+            document.getElementById('output').textContent = 'Aguardando execução...';
+        }
+
+        loadProgress();
+        renderExercises();
+    </script>
+</body>
+</html>
